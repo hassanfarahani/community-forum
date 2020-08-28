@@ -19,7 +19,7 @@ app.use(express.urlencoded({
   extended: false
 }));
 app.use(cookieParser());
-app.get('/test', function (req, res) {
+app.get('/', function (req, res) {
   res.sendFile("".concat(__dirname, "/index.html")); // res.json({
   //     message: 'Welcome to Community API!'
   // })
