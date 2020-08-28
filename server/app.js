@@ -12,10 +12,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.get('/', (req, res) => {
-    res.json({
-        message: 'Welcome to Community API!'
-    })
+app.get('/test', (req, res) => {
+    res.sendFile(`${__dirname}/index.html`)
+    // res.json({
+    //     message: 'Welcome to Community API!'
+    // })
 })
 
 app.use(notFound)
