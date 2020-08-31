@@ -27,7 +27,7 @@ var routes = [{
   component: _LoginToken["default"]
 }];
 var router = new _vueRouter["default"]({
-  // mode: 'history',
+  mode: 'history',
   base: process.env.BASE_URL,
   routes: routes
 });
