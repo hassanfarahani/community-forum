@@ -16,7 +16,7 @@ passport.use(new GoogleStrategy({
       // here is where we inserting the user into the db or finding the user from the db (update an existing user)
       // we now need to connect to the db (inserting the knexfile.js and db folder)
       const email = profile.emails[0].value
-      let user = await users.findByEmail(email)
+
       const googleUser = {
         display_name: profile.displayName,
         email,
@@ -25,35 +25,27 @@ passport.use(new GoogleStrategy({
         role_id: 1
       }
 
-      if (user) {
-        // update the user
-        googleUser.role_id = user.role_id
-        user = await users.update(user.id, googleUser)
-      } else {
-        // insert the user
-        user = await users.insert(googleUser)
+      try {
+        let user = await users.findByEmail(email)
+        if (user) {
+          // update the user
+          googleUser.role_id = user.role_id
+          user = await users.update(user.id, googleUser)
+        } else {
+          // insert the user
+          user = await users.insert(googleUser)
+        }
+        return cb(null, user) // passes the profile data to serializeUser (this is either passing the error or the user)
+        // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+        //   return cb(err, user);
+        // });
+      } catch(error) {
+        return cb(error)
       }
-      return cb(null, user) // passes the profile data to serializeUser
-    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    //   return cb(err, user);
-    // });
+
+
   }
 ));
-
-// Used to stuff a piece of information into a cookie
-// serializeUser will be invoked on authentication and its job is to serialize the user instance and store it in the session via a cookie.
-// serializeUser determines which data of the user object should be stored in the session.
-// (3): The result of the serializeUser method is attached to the session as req.session.passport.user = {}.
-passport.serializeUser((user, done) => {
-    // console.log('user in serilaize:', user)
-    done(null, user.id);
-  });
-
-// Used to decode the received cookie and persist session
-// (4): deserializeUser will be invoked every subsequent request to deserialize the instance, providing it the unique cookie identifier as a “credential”
-passport.deserializeUser((id, done) => {
-    done(null, id);
-});
 
 
 // Configure Strategy
@@ -69,3 +61,23 @@ passport.deserializeUser((id, done) => {
 
 // The user id (you provide as the second argument of the done function) is saved in the session and
 //  is later used to retrieve the whole object via the deserializeUser function.
+
+
+// ---------------------------------------------------------------------------------------------
+// we only use serialize & deserialize if we are working with session
+// // Used to stuff a piece of information into a cookie
+// // serializeUser will be invoked on authentication and its job is to serialize the user instance and store it in the session via a cookie.
+// // serializeUser determines which data of the user object should be stored in the session.
+// // (3): The result of the serializeUser method is attached to the session as req.session.passport.user = {}.
+// passport.serializeUser((user, done) => {
+//     // console.log('user in serilaize:', user)
+//     done(null, user.id);
+//   });
+
+// // Used to decode the received cookie and persist session
+// // (4): deserializeUser will be invoked every subsequent request to deserialize the instance, providing it the unique cookie identifier as a “credential”
+// passport.deserializeUser((id, done) => {
+//     done(null, id);
+// });
+
+// ---------------------------------------------------------------------------------------------

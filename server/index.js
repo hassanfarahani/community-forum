@@ -9,7 +9,7 @@ const passport = require('passport')
 // config: reads the env.file so JavaScript can use them
 require('dotenv').config()
 
-const { notFound, errorHandler } = require('./middlewares')
+const { notFound, errorHandler, checkAuthHeaderSetUser, checkAuthHeaderSetUserUnAuthorized } = require('./middlewares')
 
 const auth = require('./auth')
 
@@ -21,8 +21,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(passport.initialize())
 
+// Before any other route, we are gonna check the incoming header to see if it has a TOKEN in it
+app.use(checkAuthHeaderSetUser)
+
+// for unauthorized user, we are gonna redirect the user to login page on the client side because
+//  the backend does not have a login page, it just have a way of redirecting to google
 app.get('/', (req, res) => {
-    // res.sendFile(`${__dirname}/index.html`)
     res.json({
         message: 'Welcome to Community API!'
     })

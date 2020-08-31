@@ -21,8 +21,11 @@ module.exports = {
         // returns a promise
         return db('users').where('email', email).first()
     },
-    update(id, user) {
-        return db('users').where('id', id).update(user)
+    async update(id, user) {
+        //with SQL queries, for an update statement, we need to tell it what you want back ==> * === we want everything
+        // an update, could potentially update multiple rows; it is only gonna update one, but you do get back an array
+        const rows = await db('users').where('id', id).update(user, '*')
+        return rows[0]
     },
     insert(user) {
         // https://joi.dev/api/?v=17.2.1

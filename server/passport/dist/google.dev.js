@@ -15,7 +15,7 @@ passport.use(new GoogleStrategy({
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: '/auth/google/callback'
 }, function _callee(accessToken, refreshToken, profile, cb) {
-  var email, user, googleUser;
+  var email, googleUser, user;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -24,11 +24,6 @@ passport.use(new GoogleStrategy({
           // here is where we inserting the user into the db or finding the user from the db (update an existing user)
           // we now need to connect to the db (inserting the knexfile.js and db folder)
           email = profile.emails[0].value;
-          _context.next = 3;
-          return regeneratorRuntime.awrap(users.findByEmail(email));
-
-        case 3:
-          user = _context.sent;
           googleUser = {
             display_name: profile.displayName,
             email: email,
@@ -36,52 +31,50 @@ passport.use(new GoogleStrategy({
             image_url: profile.photos[0].value,
             role_id: 1
           };
+          _context.prev = 2;
+          _context.next = 5;
+          return regeneratorRuntime.awrap(users.findByEmail(email));
+
+        case 5:
+          user = _context.sent;
 
           if (!user) {
-            _context.next = 12;
+            _context.next = 13;
             break;
           }
 
           // update the user
           googleUser.role_id = user.role_id;
-          _context.next = 9;
+          _context.next = 10;
           return regeneratorRuntime.awrap(users.update(user.id, googleUser));
 
-        case 9:
+        case 10:
           user = _context.sent;
-          _context.next = 15;
+          _context.next = 16;
           break;
 
-        case 12:
-          _context.next = 14;
+        case 13:
+          _context.next = 15;
           return regeneratorRuntime.awrap(users.insert(googleUser));
 
-        case 14:
+        case 15:
           user = _context.sent;
 
-        case 15:
+        case 16:
           return _context.abrupt("return", cb(null, user));
 
-        case 16:
+        case 19:
+          _context.prev = 19;
+          _context.t0 = _context["catch"](2);
+          return _context.abrupt("return", cb(_context.t0));
+
+        case 22:
         case "end":
           return _context.stop();
       }
     }
-  });
-})); // Used to stuff a piece of information into a cookie
-// serializeUser will be invoked on authentication and its job is to serialize the user instance and store it in the session via a cookie.
-// serializeUser determines which data of the user object should be stored in the session.
-// (3): The result of the serializeUser method is attached to the session as req.session.passport.user = {}.
-
-passport.serializeUser(function (user, done) {
-  // console.log('user in serilaize:', user)
-  done(null, user.id);
-}); // Used to decode the received cookie and persist session
-// (4): deserializeUser will be invoked every subsequent request to deserialize the instance, providing it the unique cookie identifier as a “credential”
-
-passport.deserializeUser(function (id, done) {
-  done(null, id);
-}); // Configure Strategy
+  }, null, null, [[2, 19]]);
+})); // Configure Strategy
 // The Google authentication strategy authenticates users using a Google account and OAuth 2.0 tokens.
 //  The client ID and secret obtained when creating an application are supplied as options when creating the strategy.
 //  The strategy also requires a verify callback, which receives the access token and optional refresh token,
@@ -92,3 +85,19 @@ passport.deserializeUser(function (id, done) {
 // based on that id or some other piece of information from the cookie…
 // The user id (you provide as the second argument of the done function) is saved in the session and
 //  is later used to retrieve the whole object via the deserializeUser function.
+// ---------------------------------------------------------------------------------------------
+// we only use serialize & deserialize if we are working with session
+// // Used to stuff a piece of information into a cookie
+// // serializeUser will be invoked on authentication and its job is to serialize the user instance and store it in the session via a cookie.
+// // serializeUser determines which data of the user object should be stored in the session.
+// // (3): The result of the serializeUser method is attached to the session as req.session.passport.user = {}.
+// passport.serializeUser((user, done) => {
+//     // console.log('user in serilaize:', user)
+//     done(null, user.id);
+//   });
+// // Used to decode the received cookie and persist session
+// // (4): deserializeUser will be invoked every subsequent request to deserialize the instance, providing it the unique cookie identifier as a “credential”
+// passport.deserializeUser((id, done) => {
+//     done(null, id);
+// });
+// ---------------------------------------------------------------------------------------------

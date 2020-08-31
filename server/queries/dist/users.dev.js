@@ -22,7 +22,24 @@ module.exports = {
     return db('users').where('email', email).first();
   },
   update: function update(id, user) {
-    return db('users').where('id', id).update(user);
+    var rows;
+    return regeneratorRuntime.async(function update$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return regeneratorRuntime.awrap(db('users').where('id', id).update(user, '*'));
+
+          case 2:
+            rows = _context.sent;
+            return _context.abrupt("return", rows[0]);
+
+          case 4:
+          case "end":
+            return _context.stop();
+        }
+      }
+    });
   },
   insert: function insert(user) {
     // https://joi.dev/api/?v=17.2.1
