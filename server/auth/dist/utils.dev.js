@@ -11,7 +11,6 @@ function create(user) {
       expiresIn: '1d'
     }, function (error, token) {
       if (error) reject(error);
-      console.log('token geneerated:', token);
       resolve(token);
     });
   });

@@ -45,16 +45,15 @@ router.get('/google/callback', function (req, res, next) {
 
           case 5:
             token = _context.sent;
-            res.json({
-              token: token
-            });
+            // here server needs to redirect back to the client to give them this token so that they can make authorized request
+            res.redirect("".concat(process.env.CLIENT_REDIRECT).concat(token));
             _context.next = 12;
             break;
 
           case 9:
             _context.prev = 9;
             _context.t0 = _context["catch"](2);
-            next(_context.t0);
+            res.redirect("".concat(process.env.CLIENT_ERROR_REDIRECT).concat(_context.t0.message));
 
           case 12:
           case "end":

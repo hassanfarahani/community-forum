@@ -36,9 +36,6 @@ passport.use(new GoogleStrategy({
           user = await users.insert(googleUser)
         }
         return cb(null, user) // passes the profile data to serializeUser (this is either passing the error or the user)
-        // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-        //   return cb(err, user);
-        // });
       } catch(error) {
         return cb(error)
       }

@@ -27,9 +27,10 @@ router.get('/google/callback', (req, res, next) => {
     try {
       // create a JWT with the user & then redirect to the client side with that JWT (creating token & verifying token) --> create utils.js in auth folder
       const token = await create(user)
-      res.json({ token })
+      // here server needs to redirect back to the client to give them this token so that they can make authorized request
+      res.redirect(`${process.env.CLIENT_REDIRECT}${token}`)
     } catch(error) {
-      next(error)
+      res.redirect(`${process.env.CLIENT_ERROR_REDIRECT}${error.message}`)
     }
   })(req, res, next);
 });

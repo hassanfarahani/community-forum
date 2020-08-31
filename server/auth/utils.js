@@ -7,7 +7,6 @@ function create(user) {
         // second param: is the secret -->server will use this to verify it was the one that signed with this token
         jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: '1d'}, (error, token) => {
             if (error) reject(error)
-            console.log('token geneerated:', token)
             resolve(token)
         })
     })
