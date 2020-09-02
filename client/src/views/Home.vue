@@ -15,7 +15,7 @@
 <script>
 
 export default {
-  name: 'Home',
+  name: 'home',
   computed: {
     getLoginURL() {
       if (window.location.hostname === 'localhost') {

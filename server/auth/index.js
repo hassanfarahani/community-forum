@@ -3,12 +3,21 @@
 
 const passport = require('passport')
 const express = require('express')
+require('../passport/google')
 
 const { create } = require('./utils')
 
 const router = express.Router()
 
-require('../passport/google')
+router.get('/isAdmin', async (req, res) => {
+  if (req.user) {
+    // if user logged in, and the role was admin
+    if (req.user.role_id === 3) {
+      return res.json({ isAdmin: true })
+    }
+  }
+  res.json({ isAdmin: false })
+})
 
 // passport.authenticate middleware is used here to authenticate the request
 // passport.authenticate attempts to authenticate with the given strategy on its first parameter, which is google

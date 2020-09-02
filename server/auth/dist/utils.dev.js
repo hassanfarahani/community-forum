@@ -3,6 +3,8 @@
 // we are gonna sign in the payload & create a JWT
 var jwt = require('jsonwebtoken');
 
+var users = require('../queries/users');
+
 function create(user) {
   return new Promise(function (resolve, reject) {
     // first para: is the payload (what we want to put inside of JWT)
@@ -32,7 +34,7 @@ module.exports = {
 }; // JWT or JSON Web Token is a string which is sent in HTTP request (from client to server) to validate authenticity of the client.
 // But now, you don’t have to save JWT in database. Instead, you save it on client side only.
 // JWT is created with a secret key and that secret key is private to you. When you receive a JWT from the client,
-//  you can verify that JWT with this that secret key. Any modification to the JWT will result into verification failure.
+//  you can verify that JWT with that secret key. Any modification to the JWT will result into verification failure.
 // JWT contains three distinct parts separated with dots (.):
 // var JWT = HEADER_HASH + '.' + PAYLOAD_HASH + '.' + SIGNATURE_HASH
 // header is simply a JSON string but it contains information about the algorithm of JWT encryption

@@ -2,6 +2,9 @@ const passport = require('passport')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const users = require('../queries/users')
 
+// on first login
+const { setAdminIfNotExists } = require('../auth/utils')
+
 // Strategy config
 // To instantiate google strategy we give it our app id and app secret variables and the callbackURL that
 // (2): we’ll use to authenticate the user. As a second parameter, it takes a function that will return the profile info provided by the user.
@@ -33,6 +36,11 @@ passport.use(new GoogleStrategy({
           user = await users.update(user.id, googleUser)
         } else {
           // insert the user
+          const admins = await users.findAdmins()
+          if (admins.length === 0) {
+            googleUser.role_id = 3
+          }
+          // const user = await setAdminIfNotExists(user)
           user = await users.insert(googleUser)
         }
         return cb(null, user) // passes the profile data to serializeUser (this is either passing the error or the user)

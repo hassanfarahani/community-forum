@@ -16,6 +16,10 @@ const schema = Joi.object().keys({
 })
 
 module.exports = {
+    findAdmins() {
+        return db('users').where('role_id', 3)
+        // return an array
+    },
     findByEmail(email) {
         // database, grab the users table where the email is this given email & grab the first one
         // returns a promise
@@ -27,12 +31,13 @@ module.exports = {
         const rows = await db('users').where('id', id).update(user, '*')
         return rows[0]
     },
-    insert(user) {
+    async insert(user) {
         // https://joi.dev/api/?v=17.2.1
         const { error, value } = schema.validate(user)
 
         try {
-            return db('users').insert(value)
+            const rows = await db('users').insert(value, '*')
+            return rows[0]
         }
         catch (error) {
             Promise.reject(error)

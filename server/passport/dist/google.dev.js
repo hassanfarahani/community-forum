@@ -4,7 +4,11 @@ var passport = require('passport');
 
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-var users = require('../queries/users'); // Strategy config
+var users = require('../queries/users'); // on first login
+
+
+var _require = require('../auth/utils'),
+    setAdminIfNotExists = _require.setAdminIfNotExists; // Strategy config
 // To instantiate google strategy we give it our app id and app secret variables and the callbackURL that
 // (2): we’ll use to authenticate the user. As a second parameter, it takes a function that will return the profile info provided by the user.
 
@@ -15,7 +19,7 @@ passport.use(new GoogleStrategy({
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: '/auth/google/callback'
 }, function _callee(accessToken, refreshToken, profile, cb) {
-  var email, googleUser, user;
+  var email, googleUser, user, admins;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -50,30 +54,41 @@ passport.use(new GoogleStrategy({
 
         case 10:
           user = _context.sent;
-          _context.next = 16;
+          _context.next = 20;
           break;
 
         case 13:
           _context.next = 15;
-          return regeneratorRuntime.awrap(users.insert(googleUser));
+          return regeneratorRuntime.awrap(users.findAdmins());
 
         case 15:
-          user = _context.sent;
+          admins = _context.sent;
 
-        case 16:
-          return _context.abrupt("return", cb(null, user));
+          if (admins.length === 0) {
+            googleUser.role_id = 3;
+          } // const user = await setAdminIfNotExists(user)
+
+
+          _context.next = 19;
+          return regeneratorRuntime.awrap(users.insert(googleUser));
 
         case 19:
-          _context.prev = 19;
+          user = _context.sent;
+
+        case 20:
+          return _context.abrupt("return", cb(null, user));
+
+        case 23:
+          _context.prev = 23;
           _context.t0 = _context["catch"](2);
           return _context.abrupt("return", cb(_context.t0));
 
-        case 22:
+        case 26:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[2, 19]]);
+  }, null, null, [[2, 23]]);
 })); // Configure Strategy
 // The Google authentication strategy authenticates users using a Google account and OAuth 2.0 tokens.
 //  The client ID and secret obtained when creating an application are supplied as options when creating the strategy.
