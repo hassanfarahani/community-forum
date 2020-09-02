@@ -1,9 +1,13 @@
 "use strict";
 
 // all of the queries associated with users table
+// we use Joi library to validate the incoming data using the schema object
 var Joi = require('joi');
 
 var db = require('../db');
+
+var _require = require('./index'),
+    insertIntoTableAndValidate = _require.insertIntoTableAndValidate;
 
 var schema = Joi.object().keys({
   display_name: Joi.string().required(),
@@ -45,32 +49,7 @@ module.exports = {
     });
   },
   insert: function insert(user) {
-    var _schema$validate, error, value, rows;
-
-    return regeneratorRuntime.async(function insert$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            // https://joi.dev/api/?v=17.2.1
-            _schema$validate = schema.validate(user), error = _schema$validate.error, value = _schema$validate.value;
-            _context2.prev = 1;
-            _context2.next = 4;
-            return regeneratorRuntime.awrap(db('users').insert(value, '*'));
-
-          case 4:
-            rows = _context2.sent;
-            return _context2.abrupt("return", rows[0]);
-
-          case 8:
-            _context2.prev = 8;
-            _context2.t0 = _context2["catch"](1);
-            Promise.reject(_context2.t0);
-
-          case 11:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, null, null, [[1, 8]]);
+    // https://joi.dev/api/?v=17.2.1
+    return insertIntoTableAndValidate('users', user, schema);
   }
 };

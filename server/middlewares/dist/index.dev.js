@@ -91,6 +91,15 @@ function checkAuthHeaderSetUserUnAuthorized(req, res, next) {
   }, null, null, [[3, 11]]);
 }
 
+function isAdmin(req, res, next) {
+  if (req.user && req.user.role_id === 3) {
+    next();
+  }
+
+  res.status(401);
+  next(new Error('Un-Authorized ...'));
+}
+
 function notFound(req, res, next) {
   var error = new Error('Not Found - ' + req.originalUrl);
   res.status(404);
@@ -109,7 +118,8 @@ module.exports = {
   notFound: notFound,
   errorHandler: errorHandler,
   checkAuthHeaderSetUser: checkAuthHeaderSetUser,
-  checkAuthHeaderSetUserUnAuthorized: checkAuthHeaderSetUserUnAuthorized
+  checkAuthHeaderSetUserUnAuthorized: checkAuthHeaderSetUserUnAuthorized,
+  isAdmin: isAdmin
 }; // Bearer Tokens are the predominant type of access token used with OAuth 2.0.
 // A Bearer token basically says "Give the bearer of this token access".
 // A Bearer Token is set in the Authorization header of every Inline Action HTTP Request. For example:

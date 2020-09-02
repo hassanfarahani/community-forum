@@ -1,6 +1,9 @@
 // all of the queries associated with users table
+// we use Joi library to validate the incoming data using the schema object
 const Joi = require('joi');
 const db = require('../db')
+
+const { insertIntoTableAndValidate } = require('./index')
 
 const schema = Joi.object().keys({
     display_name: Joi.string().required(),
@@ -31,16 +34,8 @@ module.exports = {
         const rows = await db('users').where('id', id).update(user, '*')
         return rows[0]
     },
-    async insert(user) {
+    insert(user) {
         // https://joi.dev/api/?v=17.2.1
-        const { error, value } = schema.validate(user)
-
-        try {
-            const rows = await db('users').insert(value, '*')
-            return rows[0]
-        }
-        catch (error) {
-            Promise.reject(error)
-        }
+        return insertIntoTableAndValidate('users', user, schema)
     }
 }

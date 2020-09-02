@@ -23,6 +23,8 @@ var _require = require('./middlewares'),
 
 var auth = require('./auth');
 
+var api = require('./api');
+
 var app = express();
 app.use(logger('dev'));
 app.use(express.json());
@@ -42,6 +44,7 @@ app.get('/', function (req, res) {
 }); // any request that begins with /auth is gonna hit the auth router
 
 app.use('/auth', auth);
+app.use('/api/v1/', api);
 app.use(notFound);
 app.use(errorHandler);
 module.exports = app;

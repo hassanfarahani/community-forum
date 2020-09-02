@@ -12,6 +12,7 @@ require('dotenv').config()
 const { notFound, errorHandler, checkAuthHeaderSetUser, checkAuthHeaderSetUserUnAuthorized } = require('./middlewares')
 
 const auth = require('./auth')
+const api = require('./api')
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.get('/', (req, res) => {
 
 // any request that begins with /auth is gonna hit the auth router
 app.use('/auth', auth)
+app.use('/api/v1/', api)
 
 app.use(notFound)
 
