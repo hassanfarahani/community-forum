@@ -1,9 +1,15 @@
 <template>
-    <h1>forum</h1>
+    <section class="mt-3">
+        <category-list :categories="categories" />
+    </section>
 </template>
 
 <script>
-export default {
+import { mapState } from 'vuex'
 
+export default {
+    computed: {
+        ...mapState(['categories'])
+    }
 }
 </script>

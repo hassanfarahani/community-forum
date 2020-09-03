@@ -18,7 +18,8 @@ _vue["default"].use(_vuex["default"]);
 var _default = new _vuex["default"].Store({
   state: {
     token: '',
-    user: null
+    user: null,
+    categories: []
   },
   mutations: {
     setToken: function setToken(state, token) {
@@ -26,6 +27,9 @@ var _default = new _vuex["default"].Store({
     },
     setUser: function setUser(state, user) {
       state.user = JSON.parse(user);
+    },
+    setCategories: function setCategories(state, categories) {
+      state.categories = categories;
     }
   },
   actions: {
@@ -50,6 +54,27 @@ var _default = new _vuex["default"].Store({
       var commit = _ref2.commit,
           state = _ref2.state;
       return state.user.role_id === 3;
+    },
+    loadCategories: function loadCategories(_ref3) {
+      var commit, categories;
+      return regeneratorRuntime.async(function loadCategories$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              commit = _ref3.commit;
+              _context.next = 3;
+              return regeneratorRuntime.awrap((0, _API.getAllCategories)());
+
+            case 3:
+              categories = _context.sent;
+              commit('setCategories', categories);
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      });
     }
   },
   getters: {

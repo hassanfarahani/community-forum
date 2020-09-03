@@ -14,10 +14,11 @@ export default {
     appNav
   },
   methods: {
-    ...mapActions(['login'])
+    ...mapActions(['login', 'loadCategories'])
   },
   mounted() {
     this.login(localStorage.getItem('token'))
+    this.loadCategories()
   }
 }
 

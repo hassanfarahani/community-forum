@@ -3,6 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const passport = require('passport')
+const cors = require('cors')
 
 // dotenv will reboots inside of our environmental variables file so that when it reaches google.js. clientID & clientSecret have
 // actual values that are in .env file
@@ -20,6 +21,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(cors())
 app.use(passport.initialize())
 
 // Before any other route, we are gonna check the incoming header to see if it has a TOKEN in it

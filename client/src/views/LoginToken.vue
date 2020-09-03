@@ -9,7 +9,6 @@ export default {
     name: 'login-token',
     mounted() {
         const { token } = this.$route.params
-        console.log('token:', token)
         if (token) {
             this.login(token)
             this.$router.push({name: 'forum'})
