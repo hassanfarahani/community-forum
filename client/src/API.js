@@ -1,4 +1,4 @@
-let BASE_URL = 'https://community-forum-api.vercel.app'
+let BASE_URL = 'https://community-forum-server.herokuapp.com/'
 if (window.location.hostname === 'localhost') {
     BASE_URL = 'http://localhost:3000'
 }

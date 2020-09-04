@@ -32,7 +32,7 @@ export default {
       if (window.location.hostname === 'localhost') {
         return 'http://localhost:3000/auth/google'
       } else {
-        return 'https://community-forum-api.vercel.app/auth/google'
+        return 'https://community-forum-server.herokuapp.com/auth/google'
       }
     }
   }
