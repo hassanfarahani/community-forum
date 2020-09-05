@@ -1,4 +1,4 @@
-let BASE_URL = 'http://community-forum-server.herokuapp.com/'
+let BASE_URL = 'https://community-forum-server.herokuapp.com/'
 if (window.location.hostname === 'localhost') {
     BASE_URL = 'http://localhost:3000'
 }

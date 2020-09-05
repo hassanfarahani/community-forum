@@ -32,7 +32,7 @@ export default {
       if (window.location.hostname === 'localhost') {
         return 'http://localhost:3000/auth/google'
       } else {
-        return 'http://community-forum-server.herokuapp.com/auth/google'
+        return 'https://community-forum-server.herokuapp.com/auth/google'
       }
     }
   }
